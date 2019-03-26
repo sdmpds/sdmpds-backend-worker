@@ -102,3 +102,6 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+/SDMPDS-backend-worker.sln
+/SDMPDS-backend-worker/.vs/SDMPDS-backend-worker/v15
+/.vs/SDMPDS-backend-worker/v15
