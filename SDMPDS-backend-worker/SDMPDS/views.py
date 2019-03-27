@@ -1,7 +1,7 @@
 import os
 import secrets
 from datetime import datetime, timedelta
-from sqlalchemy import Date, cast
+from sqlalchemy import Date, func
 from flask import request, jsonify
 from werkzeug.utils import secure_filename
 from SDMPDS import app, db
@@ -48,12 +48,9 @@ def login_user():
 @app.route('/', methods=['GET', 'POST'])
 def hello():
     """Wyświetlenie komunikatu powitalnego na serwerze"""
-    # NIE DZIAŁA (JESZCZE)
-    # ----------------------
     time = datetime.now() - timedelta(minutes=15)
-    ilosc_uzytkownikow = Users.query.filter(cast(Users.data_utworzenia_tokenu, Date) > cast(time, Date)).all()
-    # ----------------------
-    response = {"text": "Hello!", "status": 200, "activeUsers": str(ilosc_uzytkownikow)}
+    aktywni_uzytkownicy = Users.query.filter(func.strftime('%s', Users.data_utworzenia_tokenu) > func.strftime('%s', str(time))).all()
+    response = {"text": "Hello!", "status": 200, "activeUsers": [user.nazwa for user in aktywni_uzytkownicy]}
     return jsonify(response)
 
 @app.route('/images/send', methods=["POST"])
