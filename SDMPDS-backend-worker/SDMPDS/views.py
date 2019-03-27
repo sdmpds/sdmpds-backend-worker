@@ -1,6 +1,7 @@
 import os
 import secrets
 from datetime import datetime, timedelta
+import uuid
 from sqlalchemy import Date, func
 from flask import request, jsonify
 from werkzeug.utils import secure_filename
@@ -53,6 +54,7 @@ def hello():
     response = {"text": "Hello!", "status": 200, "activeUsers": [user.nazwa for user in aktywni_uzytkownicy]}
     return jsonify(response)
 
+
 @app.route('/images/send', methods=["POST"])
 def image_send():
     # to do autoryzacji uzytkownikow w dzialajacej juz aplikacji
@@ -60,21 +62,40 @@ def image_send():
     #if kod == 404:
     #    return jsonify({"blad": "Blad autoryzacji uzytkownika"})
 
+    data = request.get_json(force=True)
+    json = jsonify({
+            "coordinates": data['coordinates'],
+            "id": data['id'],
+            "name": data['name'],
+            "date": data['date'],
+            "color": data['color'],
+            "recognized": 6
+        })
+    #return(json)
 
-    if 'file' not in request.files:
-        return jsonify({"blad": "Brak pliku"})
-    file = request.files["file"]
-    if file.filename == '':
-        return jsonify({"blad": "Nie wybrano plikow"})
-    if file and allowed_file(file.filename):
-        filename = secure_filename(file.filename)
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+    zdjecie = data['photo']
+    nazwa_pliku = uuid.uuid4()
+    with open(nazwa_pliku+".jpg", "wb") as file:
+        file.write(base64.decodebytes(file.encode()))
         czas = datetime.now()
-        new_image = Images(name=file.filename, img_src=filename, data_modyfikacji=czas)
+        new_image = Images(name=nazwa_pliku, img_src="images/"+nazwa_pliku+".jpg", data_modyfikacji=czas)
         db.session.add(new_image)
         db.session.commit()
-        return jsonify({"status": "Zdjecie przeslane",
-                        "miejsce zapisu": os.path.join(app.config['UPLOAD_FOLDER'], filename),
-                        "data zapisu": czas})
-    return jsonify({"status": "Blad przesylu",
-                    "opis": "Zdjecie w nieobslugiwanym formacie"})
+
+    #if 'file' not in request.files:
+    #    return jsonify({"blad": "Brak pliku"})
+    #file = request.files["file"]
+    #if file.filename == '':
+    #    return jsonify({"blad": "Nie wybrano plikow"})
+    #if file and allowed_file(file.filename):
+    #    filename = secure_filename(file.filename)
+    #    file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+    #    czas = datetime.now()
+    #    new_image = Images(name=file.filename, img_src=filename, data_modyfikacji=czas)
+    #    db.session.add(new_image)
+    #    db.session.commit()
+    #    return jsonify({"status": "Zdjecie przeslane",
+    #                    "miejsce zapisu": os.path.join(app.config['UPLOAD_FOLDER'], filename),
+    #                    "data zapisu": czas})
+    #return jsonify({"status": "Blad przesylu",
+    #                "opis": "Zdjecie w nieobslugiwanym formacie"})
