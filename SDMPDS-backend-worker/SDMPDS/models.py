@@ -13,10 +13,18 @@ class Users(db.Model):
 
 class Images(db.Model):
     id = Column(Integer, primary_key=True, nullable=False, unique=True)
+    date = Column(Text, nullable=False)
     name = Column(Text, nullable=False, unique=True)
+    recognized = Column(Integer, nullable=True)
+    coordinates = Column(Text, nullable=False)
     img_src = Column(Text, nullable=False, unique=True)
-    data_modyfikacji = Column(Text, nullable=False)
+    status = Column(Text, nullable=True)
 
     def __repr__(self):
-        return '<Image %s>' % self.name
+        return '<Image {}>'.format(self.name)
 
+    def __str__(self):
+        return '<Image {}>\ndate: {}\nname: {}\ncolor: {}\nrecognized: {}\n\
+        coordinates: {}\nimg_src: {}\nstatus: {}'.format(self.name, self.color,
+                                                         self.recognized, self.coordinates, 
+                                                         self.img_src, self.status)

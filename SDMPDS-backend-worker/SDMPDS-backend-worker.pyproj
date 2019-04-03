@@ -16,7 +16,7 @@
     <SuppressCollectPythonCloudServiceFiles>true</SuppressCollectPythonCloudServiceFiles>
     <Name>SDMPDS-backend-worker</Name>
     <RootNamespace>SDMPDS-backend-worker</RootNamespace>
-    <InterpreterId>MSBuild|env|$(MSBuildProjectFullPath)</InterpreterId>
+    <InterpreterId>MSBuild|env37|$(MSBuildProjectFullPath)</InterpreterId>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -31,6 +31,9 @@
     <Compile Include="SDMPDS\models.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SDMPDS\opencv_haarcascade.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="SDMPDS\views.py">
       <SubType>Code</SubType>
     </Compile>
@@ -42,12 +45,12 @@
     <Content Include="requirements.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Interpreter Include="env\">
-      <Id>env</Id>
-      <Version>3.6</Version>
-      <Description>env (Python 3.6 (64-bit))</Description>
+    <Interpreter Include="env37\">
+      <Id>env37</Id>
+      <Version>3.7</Version>
+      <Description>env37 (Python 3.7 (64-bit))</Description>
       <InterpreterPath>Scripts\python.exe</InterpreterPath>
-      <WindowsInterpreterPath>Scripts\pythonw.exe</WindowsInterpreterPath>
+      <WindowsInterpreterPath>Scripts\python.exe</WindowsInterpreterPath>
       <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
       <Architecture>X64</Architecture>
     </Interpreter>

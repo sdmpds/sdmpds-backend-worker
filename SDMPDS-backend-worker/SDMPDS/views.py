@@ -2,16 +2,23 @@ import os
 import secrets
 from datetime import datetime, timedelta
 import uuid
+from time import sleep
+import base64
+import asyncio
+import aioredis
+import redis
+from quart import request, jsonify
 from sqlalchemy import Date, func
-from flask import request, jsonify
-from werkzeug.utils import secure_filename
 from SDMPDS import app, db
 from SDMPDS.models import Users, Images
+from SDMPDS.opencv_haarcascade import findPeople
 
 
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
+
+sr = redis.StrictRedis(host='localhost', port=6379)
+sr.execute_command('FLUSHDB')
+
+
 
 def auth(login, token):
     user = Users.query.filter_by(login=str(login)).first()
@@ -19,6 +26,7 @@ def auth(login, token):
         return 404
     if user.token == token:
         return 200
+
 
 @app.route("/login", methods=['GET', 'POST'])
 def login_user():
@@ -54,48 +62,52 @@ def hello():
     response = {"text": "Hello!", "status": 200, "activeUsers": [user.nazwa for user in aktywni_uzytkownicy]}
     return jsonify(response)
 
+async def process_image(id, image_src):
+    #wysyłanie zdjęcia (jego adresu na serwerze) do funkcji
+    #count = findPeople(image_src)
+    print("funkcja przetwarzająca obraz o id = {}".format(id))
+    print("przetwarzanie...")
+    sleep(5)
+    print("przetworzono, znaleziono x osób")
+    # wpisanie do bazy ilości znalezionych osób i zmiana status na ukończony
+    #img = Images.query.filter_by(id = id).first()
+    #img.status = "done"
+    #db.session.commit()
 
-@app.route('/images/send', methods=["POST"])
-def image_send():
+@app.route('/marker', methods=["POST"])
+async def image_send():
     # to do autoryzacji uzytkownikow w dzialajacej juz aplikacji
     #kod = auth(request.values.get("login"), request.values.get("token"))
     #if kod == 404:
     #    return jsonify({"blad": "Blad autoryzacji uzytkownika"})
 
-    data = request.get_json(force=True)
-    json = jsonify({
-            "coordinates": data['coordinates'],
-            "id": data['id'],
-            "name": data['name'],
-            "date": data['date'],
-            "color": data['color'],
-            "recognized": 6
-        })
-    #return(json)
+    data = await request.get_json(force=True)
 
     zdjecie = data['photo']
-    nazwa_pliku = uuid.uuid4()
-    with open(nazwa_pliku+".jpg", "wb") as file:
-        file.write(base64.decodebytes(file.encode()))
-        czas = datetime.now()
-        new_image = Images(name=nazwa_pliku, img_src="images/"+nazwa_pliku+".jpg", data_modyfikacji=czas)
+    nazwa_pliku = str(uuid.uuid4())
+    with open(os.path.dirname(__file__) + '/../images/' 
+              + nazwa_pliku+".jpg", "wb") as file:
+        file.write(base64.b64decode(zdjecie))
+        new_image = Images(date=data['date'], name=nazwa_pliku, recognized=None,
+                           coordinates=str(data['coordinates']),
+                         img_src="./images/"+nazwa_pliku+".jpg", status="pending")
         db.session.add(new_image)
         db.session.commit()
 
-    #if 'file' not in request.files:
-    #    return jsonify({"blad": "Brak pliku"})
-    #file = request.files["file"]
-    #if file.filename == '':
-    #    return jsonify({"blad": "Nie wybrano plikow"})
-    #if file and allowed_file(file.filename):
-    #    filename = secure_filename(file.filename)
-    #    file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-    #    czas = datetime.now()
-    #    new_image = Images(name=file.filename, img_src=filename, data_modyfikacji=czas)
-    #    db.session.add(new_image)
-    #    db.session.commit()
-    #    return jsonify({"status": "Zdjecie przeslane",
-    #                    "miejsce zapisu": os.path.join(app.config['UPLOAD_FOLDER'], filename),
-    #                    "data zapisu": czas})
-    #return jsonify({"status": "Blad przesylu",
-    #                "opis": "Zdjecie w nieobslugiwanym formacie"})
+    #przesłanie do funkcji zliczającej
+    loop = asyncio.get_event_loop()
+    await aioredis.create_redis('redis://localhost', loop=loop)
+    loop.create_task(process_image(new_image.id, new_image.img_src))
+    
+    #odesłanie 200 ok
+
+    json = jsonify({
+            "id": data['id'],
+            "date": data['date'],
+            "name": data['name'],
+            "coordinates": data['coordinates'],
+            "uuid": new_image.name,
+            "status": "pending"
+        })
+
+    return(json)
