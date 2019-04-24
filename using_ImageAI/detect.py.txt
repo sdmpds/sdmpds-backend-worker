@@ -1,0 +1,31 @@
+from imageai.Detection import ObjectDetection
+import os
+
+
+start_path = ""
+
+
+def detect(img_src):
+
+    execution_path = os.getcwd()
+
+    detector = ObjectDetection()
+    detector.setModelTypeAsRetinaNet()
+    detector.setModelPath(start_path + "resnet50_coco_best_v2.0.1.h5")
+    detector.loadModel()
+    custom_objects = detector.CustomObjects(person=True, car=False)
+    detections = detector.detectCustomObjectsFromImage(input_image=str(img_src), custom_objects=custom_objects, minimum_percentage_probability=65)
+
+
+    cnt = 0
+
+
+    for eachObject in detections:
+       cnt = cnt + 1
+        
+    return cnt
+
+
+ 
+    
+print("Nr of people detected: " + str(detect(start_path + "image.jpg")))
