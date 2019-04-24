@@ -15,3 +15,5 @@ pip3 install https://github.com/OlafenwaMoses/ImageAI/releases/download/2.0.2/im
 
 Also, You need to have RetinaNet model located enywhere You want and know it's full location(ex. If you are using Jupyter).
 You need to change directories in source file.
+
+But first, You need to download this model from here: https://github.com/OlafenwaMoses/ImageAI/releases/download/1.0/resnet50_coco_best_v2.0.1.h5
