@@ -1,17 +1,17 @@
 import asyncio
 import base64
 import os
-import random
 import uuid
 from datetime import datetime, timedelta
+from sqlalchemy import asc
 
-import aioredis
 import simplejson as json
 from quart import request, jsonify
 
 from SDMPDS import app, db
 from SDMPDS.models.marker_model import Marker
 from SDMPDS.models.question_model import Question
+from SDMPDS.opencv_haarcascade import find_people
 
 
 async def process_image(image_id, image_src):
@@ -19,12 +19,14 @@ async def process_image(image_id, image_src):
     # count = find_people(image_src)
     print("funkcja przetwarzająca obraz o id = {}".format(image_id))
     print("przetwarzanie...")
-    await asyncio.sleep(20)
-    random_recognized = random.randint(0, 30)
-    print("przetworzono, znaleziono {} osób".format(random_recognized))
-    marker = Marker.query.filter_by(id=image_id).first() # wpisanie do bazy ilości znalezionych osób i zmiana status na ukończony
+    # await asyncio.sleep(20)
+    # random_recognized = random.randint(0, 30)
+    recognized = find_people(image_src)
+    print("przetworzono, znaleziono {} osób".format(recognized))
+    marker = Marker.query.filter_by(
+        id=image_id).first()  # wpisanie do bazy ilości znalezionych osób i zmiana status na ukończony
     marker.status = "completed"
-    marker.recognized = random_recognized
+    marker.recognized = recognized
     db.session.commit()
 
 
@@ -51,17 +53,23 @@ async def create_marker():
         db.session.add(new_image)
         db.session.commit()
     loop = asyncio.get_event_loop()  # transfer to counting function
-    await aioredis.create_redis('redis://localhost', loop=loop)
+    # await aioredis.create_redis('redis://localhost', loop=loop)
     loop.create_task(process_image(new_image.id, new_image.img_src))
     return jsonify({
+        "code": 201,
         "status": "pending"
     })
 
 
 @app.route("/markers")
 async def get_marker():
-    markers = Marker.query.filter(Marker.date > str(datetime.now() - timedelta(minutes=5)))
-    quest = Question.query.filter(Question.date > str(datetime.now() - timedelta(minutes=3)))
+    period_of_time = 5
+    if request.args.get('time'):
+        period_of_time = int(request.args.get('time'))
+        print(period_of_time)
+
+    markers = Marker.query.filter(Marker.date > str(datetime.now() - timedelta(minutes=period_of_time)))
+    quest = Question.query.filter(Question.date > str(datetime.now() - timedelta(minutes=period_of_time)))
     questions = []
     pending = []
     completed = []
