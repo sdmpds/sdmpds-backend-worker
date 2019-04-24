@@ -1,11 +1,10 @@
 import asyncio
 import base64
 import os
-import random
 import uuid
 from datetime import datetime, timedelta
+from sqlalchemy import asc
 
-import aioredis
 import simplejson as json
 from quart import request, jsonify
 
@@ -54,7 +53,7 @@ async def create_marker():
         db.session.add(new_image)
         db.session.commit()
     loop = asyncio.get_event_loop()  # transfer to counting function
-    await aioredis.create_redis('redis://localhost', loop=loop)
+    # await aioredis.create_redis('redis://localhost', loop=loop)
     loop.create_task(process_image(new_image.id, new_image.img_src))
     return jsonify({
         "code": 201,
@@ -64,8 +63,13 @@ async def create_marker():
 
 @app.route("/markers")
 async def get_marker():
-    markers = Marker.query.filter(Marker.date > str(datetime.now() - timedelta(minutes=5)))
-    quest = Question.query.filter(Question.date > str(datetime.now() - timedelta(minutes=3)))
+    period_od_time = 5
+    if request.args.get('time'):
+        period_od_time = int(request.args.get('time'))
+        print(period_od_time)
+
+    markers = Marker.query.filter(Marker.date > str(datetime.now() - timedelta(minutes=period_od_time)))
+    quest = Question.query.filter(Question.date > str(datetime.now() - timedelta(minutes=period_od_time)))
     questions = []
     pending = []
     completed = []
