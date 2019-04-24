@@ -2,12 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3f256afe-4d07-4608-8bf0-6619e8ffd2d8" name="Default Changelist" comment="recognition">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Procfile" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/SDMPDS/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/SDMPDS/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SDMPDS/controllers/root_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/SDMPDS/controllers/root_controller.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db/ServerDatabase.db" beforeDir="false" afterPath="$PROJECT_DIR$/db/ServerDatabase.db" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -18,7 +14,7 @@
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/sdmpds$runserver__1_.coverage" NAME="runserver (1) Coverage Results" MODIFIED="1554454566936" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/sdmpds$runserver.coverage" NAME="runserver Coverage Results" MODIFIED="1554454250941" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/SDMPDS-backend-worker" />
-    <SUITE FILE_PATH="coverage/sdmpds_backend_worker_flask_without_recognition$runserver.coverage" NAME="runserver Coverage Results" MODIFIED="1556097585994" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/sdmpds_backend_worker_flask_without_recognition$runserver.coverage" NAME="runserver Coverage Results" MODIFIED="1556104394129" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="DatabaseView">
     <option name="SHOW_INTERMEDIATE" value="true" />
@@ -96,8 +92,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/SDMPDS/controllers/root_controller.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="241">
-              <caret line="71" column="106" selection-start-line="71" selection-start-column="106" selection-end-line="71" selection-end-column="106" />
+            <state relative-caret-position="166">
+              <caret line="66" column="34" selection-start-line="66" selection-start-column="34" selection-end-line="66" selection-end-column="34" />
               <folding>
                 <element signature="e#0#14#0" expanded="true" />
               </folding>
@@ -291,7 +287,7 @@
       <workItem from="1554465839606" duration="2304000" />
       <workItem from="1554483487494" duration="16092000" />
       <workItem from="1554905966942" duration="4193000" />
-      <workItem from="1556091533692" duration="1914000" />
+      <workItem from="1556091533692" duration="2227000" />
     </task>
     <task id="LOCAL-00001" summary="recognition">
       <created>1554492073135</created>
@@ -311,24 +307,23 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="25395000" />
+    <option name="totallyTimeSpent" value="25708000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1680" height="1050" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.17826618" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.4993895" visible="true" weight="0.32959184" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4993895" weight="0.32959184" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.29285714" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Docker" order="7" sideWeight="0.498779" weight="0.32959184" />
-      <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.4981685" weight="0.32959184" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="8" sideWeight="0.4981685" visible="true" weight="0.32959184" />
       <window_info anchor="bottom" id="Version Control" order="9" sideWeight="0.4993895" weight="0.32959184" />
       <window_info anchor="bottom" id="Database Changes" order="10" />
       <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.50061053" side_tool="true" weight="0.32959184" />
@@ -470,8 +465,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/SDMPDS/controllers/root_controller.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="241">
-          <caret line="71" column="106" selection-start-line="71" selection-start-column="106" selection-end-line="71" selection-end-column="106" />
+        <state relative-caret-position="166">
+          <caret line="66" column="34" selection-start-line="66" selection-start-column="34" selection-end-line="66" selection-end-column="34" />
           <folding>
             <element signature="e#0#14#0" expanded="true" />
           </folding>

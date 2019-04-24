@@ -63,13 +63,13 @@ async def create_marker():
 
 @app.route("/markers")
 async def get_marker():
-    period_od_time = 5
+    period_of_time = 5
     if request.args.get('time'):
-        period_od_time = int(request.args.get('time'))
-        print(period_od_time)
+        period_of_time = int(request.args.get('time'))
+        print(period_of_time)
 
-    markers = Marker.query.filter(Marker.date > str(datetime.now() - timedelta(minutes=period_od_time)))
-    quest = Question.query.filter(Question.date > str(datetime.now() - timedelta(minutes=period_od_time)))
+    markers = Marker.query.filter(Marker.date > str(datetime.now() - timedelta(minutes=period_of_time)))
+    quest = Question.query.filter(Question.date > str(datetime.now() - timedelta(minutes=period_of_time)))
     questions = []
     pending = []
     completed = []
